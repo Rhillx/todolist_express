@@ -7,7 +7,7 @@
 			request.onload = () => {
 				const data = JSON.parse(request.responseText);
 				resolve(data)
-			}; 
+			};
 			request.onerror = (err) => {
 				reject(err)
 			};
@@ -24,7 +24,7 @@
 			request.onload = () => {
 				const data = JSON.parse(request.responseText);
 				resolve(data)
-			}; 
+			};
 			request.onerror = (err) => {
 				reject(err)
 			};
@@ -42,7 +42,7 @@
 			request.onload = () => {
 				const data = JSON.parse(request.responseText);
 				resolve(data)
-			}; 
+			};
 			request.onerror = (err) => {
 				reject(err)
 			};
@@ -51,7 +51,7 @@
 		});
 	} // POST
 
-	function DELETE(url, data = {}) {
+	function DELETE(url, data) {
 		return new Promise((resolve, reject) => {
 			const request = new XMLHttpRequest();
 			request.open('DELETE', url);
@@ -60,7 +60,7 @@
 			request.onload = () => {
 				const data = JSON.parse(request.responseText);
 				resolve(data)
-			}; 
+			};
 			request.onerror = (err) => {
 				reject(err)
 			};
@@ -95,7 +95,7 @@ ${todoItem.data.todo}
 				console.log('about to delete LOL')
 				const {id} = todoItem;
 
-				DELETE('/api/todo/' + id)
+				DELETE('/api/todo/' + todoItem.id)
 					.then((data) => {
 						render(data);
 					})
@@ -121,7 +121,7 @@ ${todoItem.data.todo}
 						alert(e)
 					})
 			})
-			
+
 		}
 
 		if (todoItems.length === 0) {
@@ -153,15 +153,22 @@ No todoitems!
 		});
 	})
 
-})();
+	document.querySelector('.js-add-todo').addEventListener('keydown', (e) => {
+		const input = document.querySelector('.js-todo-text');
+		console.log(e.keyCode);
+		if(e.keyCode === 13){
 
-/*
-	return POST('/api/todos', {
-			todo: 'wake up',
+		input.setAttribute('disabled', 'disabled');
+
+		POST('/api/todos', {
+			todo: input.value,
 			when: new Date().getTime() + 9 * 60 * 60 * 1000
+		}).then((data) => {
+			input.removeAttribute('disabled');
+			input.value = '';
+			render(data);
 		});
-	.then((dataFromPostLOL) => {
-		console.log(dataFromPostLOL);
-	});
-*/
+		}
+	})
 
+})();
